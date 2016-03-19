@@ -11,6 +11,20 @@
 ### Electronic Frog Eye
 
 ### E-eye
+综述
+文章利用CSI信息识别原地和移动的动作，使用半监督学习获得行为profile作为识别的对照。
+主要focus在location-oriented 活动识别（即，人类活动与场所的联系，比如厕所刷牙，厨房做饭）
+- 用较少的发送设备从CSI信息中提特征，识别房屋中的in-place活动
+- 利用一个wifi ap和几个设备的框架，采用相关Profile matching 算法匹配已知活动
+- 动态构建profile，若无线设备移动了/替换了可以动态自适应
+- 实验：2套公寓四个月数据、1个AP3个连接设备，精确区分8个跨房间的走路活动(20轮)，9个日常活动（59轮）和其他活动(100轮)，精确度96%，1个device则92%
+- 宽信道可以增加准确率
+
+限制：只能识别单人，无宠物和其他移动物体
+
+方法
+1. 区分walking和in-place activity: 前者幅度variance 大，后者幅度variance小但是有repeat Pattern；基于variance阈值区分两种活动
+2. walking movement： Multiple-Dimensional Dynamic Time Warping(MD-DTW)，归一化不同速度的行为；in-place activity: 比较CSI分布直方图，用Earth Mover Distance(EMD)作为距离度量
 
 ### WiSee
 综述
@@ -39,7 +53,7 @@ $$
 N为接收端天线数，$$$D_{nm}$$$ 表示第n个天线上第m段的多普勒能量，梯度下降寻找最小值
 从而锁定target　user的方向
 4. 多径效应
-多径和镜面反射等干扰会导致多普勒频移正反点到。在分段中Wisee只需捕捉能量最大的路径，所以不需要太多天线来区分多径效应。而多径造成的正负多普勒频移颠倒只需利用preamble来纠正，因为默认对着接收端的正推是preamble信号
+多径和镜面反射等干扰会导致多普勒频移正反颠倒。在分段中Wisee只需捕捉能量最大的路径，所以不需要太多天线来区分多径效应。而多径造成的正负多普勒频移颠倒只需利用preamble来纠正，因为默认对着接收端的正推是preamble信号
 
 
 实现步骤
