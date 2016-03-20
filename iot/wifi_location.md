@@ -22,7 +22,11 @@ CSI复数表示
 $$
 H_k = ||H_k||e^{j\Phi(H_k)}
 $$
+
+- CSI 经过Hampel Identifier提取outlier观测
+- 通过motion indicator粗度检测是否移动，若移动则提取特征（每个载波的复数CSI计算相关矩阵，提取最大特征值，组合成两维特征向量）
 ![alt](images/deman_workflow.png)
+
 ### Human Mobility Enhances(Liu Yunhao etc)
 综述
 介绍了利用惯性传感器对GPS定位的纠正。精度可达到5~8m（无纠正15m以上）；主要工作：将GPS坐标系与Local Sensing坐标系结合，用learning的方式建模
