@@ -3,12 +3,35 @@
 ### 文章列表
 - Electronic Frog Eye: Counting Crowd Using Wifi 
 - 802.11 with Multiple Antennas for Dummies (Daniel Halperin. Univ. of Washington & Intel Labes)
-- Non-Invasive Detection of Moving and Stationary Human with Wifi (Liu Yunhao)
+- DeMan: Non-Invasive Detection of Moving and Stationary Human with Wifi (Liu Yunhao)
 - Human Mobility Enhances Global Positioning Accuracy for Mobile Phone Localization (Liu Yunhao)
 - E-eyes: Device-free Location-oriented Activity Identification Using Fine-grained WiFi Signal(Stevens Institude of Technology, USA)
 - Wisee: Whole-Home Gesture Recognition Using Wireless Signals(Qifan Pu, Univ. of Washington)
 
 ### Electronic Frog Eye
+
+### Deman(Liu Yunhao etc)
+综述
+讨论了如何区分Moving和Stationary Person以及无人的室内情况。先用每个载波的复数CSI相关矩阵特征值，发现Moving和Stationary/无人的阈值，而后对人的呼吸特征建立了正弦模型，各载波作参数估计，用LMS的方法求出同一的呼吸频率，与人类呼吸频率比较区分是否有人
+- 提出一个同时检测移动和静止人的框架；基于Wifi、环境独立、非侵入式
+- 设计实现了一个利用人体呼吸胸腔震动来检测静止人的方法
+- 利用了CSI的相频信息
+
+方法
+CSI复数表示
+$$
+H_k = ||H_k||e^{j\Phi(H_k)}
+$$
+![alt](images/deman_workflow.png)
+### Human Mobility Enhances(Liu Yunhao etc)
+综述
+介绍了利用惯性传感器对GPS定位的纠正。精度可达到5~8m（无纠正15m以上）；主要工作：将GPS坐标系与Local Sensing坐标系结合，用learning的方式建模
+关键概念： dead reckoning
+方法：
+最优化的transform使得误差最小
+- translation
+- scaling
+- rotation
 
 ### E-eye
 综述
@@ -24,7 +47,17 @@
 
 方法
 1. 区分walking和in-place activity: 前者幅度variance 大，后者幅度variance小但是有repeat Pattern；基于variance阈值区分两种活动
-2. walking movement： Multiple-Dimensional Dynamic Time Warping(MD-DTW)，归一化不同速度的行为；in-place activity: 比较CSI分布直方图，用Earth Mover Distance(EMD)作为距离度量
+2. walking movement： Multiple-Dimensional Dynamic Time Warping(MD-DTW)，归一化不同速度的行为；in-place activity: 比较CSI分布直方图，用Earth Mover Distance(EMD，两个分布相似性的度量)作为距离度量
+3. 生成profile：聚类-用户标记
+
+粗粒度AI：每个载波CSI C(P)都对应一个方差V(P),累计移动方差为所有载波上V(p)之和，最大累计移动方差与阈值20比较区分移动or原地
+
+原地活动的检测：EMD比较CSI幅度分布，CSI profile中已知活动最近的距离若小于一个阈值则归类，反则为unknown活动；另不同场景同一个动作分别建立csi profile
+
+walking 活动检测：移动的CSI特征与trace非常相关；MD-DTW检测
+Doorway检测：对于很多unknown活动，根据跨越哪到门判断接下来可能的活动(treated as in-place,单独建立profile)
+实现：
+多设备的连接网络，多个距离度量的线性加权，
 
 ### WiSee
 综述
