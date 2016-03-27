@@ -1,7 +1,7 @@
 ## Paper Review 
 ##### *The Scalable Commutativity Rule: Designing Scalable Software for Multicore Processors*
 综述
-Interface的可扩展性在定义的时候就可以被确定而不需要等到具体实现时才发现，scalable community rule: 理论上当interface操作可交换时，他们可以有可扩展的实现。本文证明了这个定理，并给出了叫COMMUTER的工具，可以自动发现接口模型的可交换性，并自动生成C的测试程序辅助程序开发。有了这项证明后，程序的开发流程有了质的改变：先判断接口API的可交换性（Commutativity）从而判断是否可扩展，再寻找可以扩展的实现。
+Interface的可扩展性在定义的时候就可以被确定而不需要等到具体实现时才发现，scalable community rule(可扩展互换规则): 理论上当interface操作可交换时，他们可以有可扩展的实现。本文证明了这个定理，并给出了叫COMMUTER的工具，可以自动发现接口模型的可交换性，并自动生成C的测试程序辅助程序开发。有了这项证明后，程序的开发流程有了质的改变：先判断接口API的可交换性（Commutativity）从而判断是否可扩展，再寻找可以扩展的实现。
 
 
 Commutativity: 直观而言，当操作可交换，则它们的结果将与执行顺序无关。给定并发、可交换的操作，则他们一定有可扩展的实现。
@@ -36,3 +36,18 @@ SIM-commutativity可直接推断出可扩展性，且只取决于接口定义而
 4. Evaluation
 文章对比了linux下和定制sv6操作系统下运行test case的情况。Linux的可扩展操作的比例为9389/13664，sv6为（13528/13664），充分说明了如今成熟的操作系统仍有很多不可扩展的设计阻碍了规模化。于是本文的工作对操作系统的并发设计有指导意义。
 ![alt](images/commute_compare.png)
+
+## 课程讲解
+背景： 多核情况下系统性能不再提升，源于对共享内存的访问
+Kernel Scalability is important: 由于内核的通用性， 代码本身复杂，通常kernel比应用需要更多的县城
+interface scalability:
+以同时创建三个文件为例： create("X"),create("Y"),create("Z")
+不能并行：分配FD时默认申请最小的文件描述符,可通过per-core solution解决
+Design: Guides degsign of scalable interfaces
+Implement: Set a clear implementation target
+Test: Systematic, workload-independent scalability testing
+对比gmake和exim的scale bottleneck
+
+H: 一系列action运行的结果符合对interface的定义
+
+
