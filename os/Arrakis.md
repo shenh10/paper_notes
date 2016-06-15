@@ -88,3 +88,6 @@ DFS [Josephson et al. 2010] and PMFS [Dulloor et al. 2014]：Focus在减少传�
 Moneta-D [Caulfield et al. 2012]：是个提供user-level 快速访问SSD的软硬件平台；硬件和kernel检验操作权限，user-level驱动与设备直接通信。Arrakis不需要检查权限，因为Application可以完全控制自己的VSA
 
 Aerie [Volos et al. 2014]：多进程与受信任的用户文件系统服务通信获得文件元数据和锁操作，然后直接对硬件操作读写文件。
+
+##### 评价
+这篇文章与之前的很多工作类似，都是用到了设备IO bypass kernel的思想， 然而Dune、IX都没有完全绕过kernel（提供给Application一部分硬件权限）。Arrakis不仅使App可以直接访问网络设备，还可以直接访问存储。然而奇怪的是，同样作为user level network stack, mTCP 实现25X于Linux的性能提升，Arrakis只提高了2.3X(UDP echo server)， 从文章来看Arrakis访问vNIC经过了自己实现的LibOS，这个LibOS的overhead其实并不清楚，有可能是因为两篇文章的benchmark不同，然而这个lib的实现效率可能带来了额外的overhead。对比Dune、IX， Arrakis因为抽象出了VAS的概念，使得访问内容不需要权限检查，更彻底地规避了kernel的参与，然而VAS的大小分配是个tradeoff——如何合理定义VAS的大小？如果超出分配大小怎么办？文章好像对这一部分内容没有提及。另外，与mTCP类似，这个实现需要在用户空间内实现kernel TCP协议栈的全部功能，工作量很大，目前Arrakis只是实现了现有的off-the-shelf的外设硬件设备的基本功能，然而传统OS实现的软件功能，如果要在Arrakis上实现，工作量则又是大大增加。另外，本文的VAS是per-application的，如果是多进程程序，多进程访问VNIC也需要对queue写保护，那种情况下的overhead文章没有明确指出。
